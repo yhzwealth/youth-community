@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chuang.bootplus.mapper.UserMapper">
+    <select id="getUserInfo" resultType="com.chuang.bootplus.vo.user.UserInfoVO">
+        SELECT id,username,phone,nickname,avatar,background,
+               gender,birth,QQ,WeChat,email,blog,
+               introduction,privacy,gmt_create,
+               (SELECT COUNT(*) FROM `follow` WHERE user_id  = id AND fan_id = (#{guest})) AS followed,
+               (SELECT COUNT(*) FROM `follow` WHERE fan_id = id) AS follow,
+               (SELECT COUNT(*) FROM `follow` WHERE user_id = id) AS fan
+        FROM `user`
+        WHERE `id` = (#{id})
+    </select>
+</mapper>

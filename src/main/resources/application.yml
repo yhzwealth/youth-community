@@ -1,0 +1,98 @@
+server:
+  port: 8848
+  servlet:
+    context-path: /
+
+spring:
+  servlet:
+    multipart:
+      max-request-size: 10MB
+      max-file-size: 10MB
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
+    timeout: 1800000
+    lettuce:
+      pool:
+        max-active: 20
+        max-wait: -1
+        max-idle: 5
+        min-idle: 0
+  datasource:
+    username: root
+    password: wea010lth320
+    url: jdbc:mysql://localhost:3306/community?useSSL=false&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#  mvc:
+#    servlet:
+#      这个path就是在最前面加上的前缀，可以在安全配置中使用
+#      path: xxxx
+
+mybatis-plus:
+  # 配置逻辑删除
+  global-config:
+    db-config:
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  mapper-locations: classpath*:mappings/*Mapper.xml
+  # 配置日志及命名转换
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    root: info
+    com.chuang.bootplus: debug
+
+wx:
+  clh:
+    appid: wxf5f2ef031e5c30d7
+    appSecret: 41c29a3bb4bf825969b5fb767e62776d
+
+# 对象存储配置
+storage:
+  # 本地对象存储配置信息
+  local:
+    uploadAddress: src/main/webapp/img
+    visitAddress: http://localhost:14141/img/
+  # 阿里云对象存储配置信息
+  aliyun:
+    endpoint: oss-cn-shenzhen.aliyuncs.com
+    accessKeyId: 111111
+    accessKeySecret: xxxxxx
+    bucketName: xxxxxx
+  # 腾讯对象存储配置信息
+  # 请参考 https://cloud.tencent.com/document/product/436/6249
+  tencent:
+    #API密钥secretId
+    secretId: AKIDXt76sNulZCajgNt44uWs58uTpMesHPko
+    #API密钥secretKey
+    secretKey: 0kGlsjtpgRmBNptcKn57A7qIbuHH2W3X
+    #存储桶所属地域
+    region: ap-nanjing
+    #存储桶空间名称
+    bucketName: litemall-1305662812
+    #存储桶访问域名
+    url: https://litemall-1305662812.cos.ap-nanjing.myqcloud.com
+    #上传文件前缀路径(eg:/images/)
+    prefix: /images/
+
+  # 七牛云对象存储配置信息
+  qiniu:
+    domain: http://qtibti99h.hn-bkt.clouddn.com # 访问域名
+    accessKey: iccxWHOwBtROUQMc_Nm2nEdO-GSWAFrHC7YBclay
+    secretKey: uDo6GeJPImZ76BIxLvcygchK8TG05RNlbymujcnn
+    bucket: lcc2021
+    zone: huanan
+
+jwt:
+  # JWT存储的请求头
+  tokenHeader: Authorization
+  # JWT 加解密使用的密钥
+  secret: dev414
+  # JWT的超期限时间（60*60*24） 单位：秒
+  expiration: 604800
+  # JWT 负载中拿到开头
+  tokenHead: Head414

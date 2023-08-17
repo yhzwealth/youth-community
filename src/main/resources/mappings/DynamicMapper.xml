@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chuang.bootplus.mapper.DynamicMapper">
+    <update id="setTop">
+        UPDATE `dynamic`
+        SET `top` = 1 - `top`
+        WHERE `id` = (#{id})
+    </update>
+
+    <select id="getAllByGuest" resultType="com.chuang.bootplus.vo.dynamic.DynamicListVO">
+        SELECT id,user_id,
+               (SELECT nickname FROM `user` WHERE `id` = user_id)AS nickname,
+               (SELECT avatar FROM `user` WHERE `id` = user_id)AS avatar,
+               content,pic,
+               (SELECT COUNT(*) FROM `love` WHERE `dynamic_id` = `dynamic`.id) AS loveNum,
+               (SELECT COUNT(*) FROM `love` WHERE `dynamic_id` = `dynamic`.id AND `user_id` = (#{guestName})) AS love,
+               (SELECT COUNT(*) FROM `comment` WHERE `dynamic_id` = `dynamic`.id) AS commentNum,
+               top,`type`,`comment`,privacy,gmt_create
+        FROM `dynamic`
+        WHERE user_id=(#{username}) AND `privacy` = 2
+        ORDER BY `top` DESC,`gmt_create` DESC
+    </select>
+
+    <select id="getAllByFan" resultType="com.chuang.bootplus.vo.dynamic.DynamicListVO">
+        SELECT id,user_id,
+               (SELECT nickname FROM `user` WHERE `id` = user_id)AS nickname,
+               (SELECT avatar FROM `user` WHERE `id` = user_id)AS avatar,
+               content,pic,
+               (SELECT COUNT(*) FROM `love` WHERE `dynamic_id` = `dynamic`.id) AS loveNum,
+               (SELECT COUNT(*) FROM `love` WHERE `dynamic_id` = `dynamic`.id AND `user_id` = (#{guestName})) AS love,
+               (SELECT COUNT(*) FROM `comment` WHERE `dynamic_id` = `dynamic`.id) AS commentNum,
+               top,`type`,`comment`,privacy,gmt_create
+        FROM `dynamic`
+        WHERE user_id=(#{username}) AND (`privacy` = 2 OR `privacy` = 1)
+        ORDER BY `top` DESC,`gmt_create` DESC
+    </select>
+
+    <select id="getAll" resultType="com.chuang.bootplus.vo.dynamic.DynamicListVO">
+        SELECT id,user_id,
+               (SELECT nickname FROM `user` WHERE `id` = user_id)AS nickname,
+               (SELECT avatar FROM `user` WHERE `id` = user_id)AS avatar,
+               content,pic,
+               (SELECT COUNT(*) FROM `love` WHERE `dynamic_id` = `dynamic`.id) AS loveNum,
+               (SELECT COUNT(*) FROM `love` WHERE `dynamic_id` = `dynamic`.id AND `user_id` = (#{guestName})) AS love,
+               (SELECT COUNT(*) FROM `comment` WHERE `dynamic_id` = `dynamic`.id) AS commentNum,
+               top,`type`,`comment`,privacy,gmt_create
+        FROM `dynamic`
+        WHERE user_id=(#{username})
+        ORDER BY `top` DESC,`gmt_create` DESC
+    </select>
+
+    <select id="getFollow" resultType="com.chuang.bootplus.vo.dynamic.DynamicListVO">
+        SELECT id,user_id,
+               (SELECT nickname FROM `user` WHERE `id` = user_id)AS nickname,
+               (SELECT avatar FROM `user` WHERE `id` = user_id)AS avatar,
+               content,pic,
+               (SELECT COUNT(*) FROM `love` WHERE `dynamic_id` = `dynamic`.id) AS loveNum,
+               (SELECT COUNT(*) FROM `love` WHERE `dynamic_id` = `dynamic`.id AND `user_id` = (#{guestName})) AS love,
+               (SELECT COUNT(*) FROM `comment` WHERE `dynamic_id` = `dynamic`.id) AS commentNum,
+               top,`type`,`comment`,privacy,gmt_create
+        FROM `dynamic`
+        WHERE user_id IN (SELECT `user_id` FROM `follow` WHERE `fan_id` = (#{username})) AND `privacy` != 0
+        ORDER BY `gmt_create` DESC
+    </select>
+
+    <select id="getDynamicByType" resultType="com.chuang.bootplus.vo.dynamic.DynamicListVO">
+        SELECT id,user_id,
+               (SELECT nickname FROM `user` WHERE `id` = user_id)AS nickname,
+               (SELECT avatar FROM `user` WHERE `id` = user_id)AS avatar,
+               content,pic,
+               (SELECT COUNT(*) FROM `love` WHERE `dynamic_id` = `dynamic`.id) AS loveNum,
+               (SELECT COUNT(*) FROM `love` WHERE `dynamic_id` = `dynamic`.id AND `user_id` = (#{guestName})) AS love,
+               (SELECT COUNT(*) FROM `comment` WHERE `dynamic_id` = `dynamic`.id) AS commentNum,
+               top,`type`,`comment`,privacy,gmt_create
+        FROM `dynamic`
+        WHERE `privacy` = 2 AND `type` = (#{type})
+        ORDER BY `gmt_create` DESC
+    </select>
+</mapper>
